@@ -49,11 +49,11 @@ jobs:
       
       - name: Execute Create New Objects SQL Against Snowflake
         id: sql_execute_create_new        
-        run: ~/snowflake/snowsql -f deploy/01-objects.sql >> $GITHUB_OUTPUT       
+        run: ~/snowflake/snowsql -f deploy/01-objects.sql     
 
       - name: Execute test
         id: sql_execute_create_test
-        run: echo steps.sql_execute_test.outcome
+        run: echo steps.sql_execute_create_new.outcome
       
       # create new objects
       #- name: Execute Create New Objects SQL Against Snowflake
