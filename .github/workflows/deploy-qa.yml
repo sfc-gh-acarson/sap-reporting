@@ -38,4 +38,4 @@ jobs:
       # create backup objects
       - name: Execute Create Backups SQL Against Snowflake
         id: sql_execute_create_baks
-        run: ~/snowflake/snowsql -f 00-back-ups.sql -a $SF_ACCOUNT -u $SF_USERNAME -p $SF_PASSWORD -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE
+        run: ~/snowflake/snowsql -f 00-back-ups.sql -a $SF_ACCOUNT -u $SF_USERNAME -P $SF_PASSWORD -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE
