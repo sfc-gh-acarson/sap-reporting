@@ -58,5 +58,12 @@ jobs:
 
       # create backup objects
       - name: Execute Create Objects SQL Against Snowflake
+        if: steps.sql_execute_test.outcome == 'success' 
         id: sql_execute_clean       
-        run: ~/snowflake/snowsql -f deploy/03-clean-backups.sql               
+        run: ~/snowflake/snowsql -f deploy/03-clean-backups.sql
+
+      # create backup objects
+      - name: Execute Create Objects SQL Against Snowflake
+        if: steps.sql_execute_test.outcome != 'success' 
+        id: sql_execute_revert       
+        run: ~/snowflake/snowsql -f deploy/03-revert.sql        
