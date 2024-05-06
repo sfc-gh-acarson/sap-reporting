@@ -33,11 +33,7 @@ jobs:
         uses: actions/checkout@master
           
       - name: Download SnowSQL
-        run:  curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
-      #- name: Install SnowSQL
-      #  run: |
-      #    curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
-      #    SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash      
+        run:  curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash    
         
       - name: Install SnowSQL          
         run: SNOWSQL_DEST=~/snowflake SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
@@ -47,6 +43,20 @@ jobs:
 
       # create backup objects
       - name: Execute Create Backups SQL Against Snowflake
-        id: sql_execute_create_baks
-        #run: ~/snowflake/snowsql -f 00-back-ups.sql -a $SF_ACCOUNT -u $SF_USERNAME -P $SF_PASSWORD -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE
+        id: sql_execute_create_baks        
         run: ~/snowflake/snowsql -f deploy/00-back-ups.sql
+
+      # create backup objects
+      - name: Execute Create Objects SQL Against Snowflake
+        id: sql_execute_create_new        
+        run: ~/snowflake/snowsql -f deploy/01-objects.sql        
+
+      # create backup objects
+      - name: Execute Create Objects SQL Against Snowflake
+        id: sql_execute_test       
+        run: ~/snowflake/snowsql -f deploy/02-test.sql         
+
+      # create backup objects
+      - name: Execute Create Objects SQL Against Snowflake
+        id: sql_execute_clean       
+        run: ~/snowflake/snowsql -f deploy/03-clean-backups.sql               
