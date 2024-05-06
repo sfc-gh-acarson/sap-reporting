@@ -1,1 +1,3 @@
 
+drop table QA_DB.PUB_SAP.EMPLOYEES;
+alter table QA_DB.PUB_SAP.EMPLOYEES_BAK rename to QA_DB.PUB_SAP.EMPLOYEES;
