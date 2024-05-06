@@ -54,7 +54,7 @@ jobs:
       # run tests
       - name: Execute Testing SQL Against Snowflake
         id: sql_execute_test       
-        run: ~/snowflake/snowsql -f deploy/02-test.sql
+        run: ~/snowflake/snowsql -f deploy/02-test.sql exit_on_error=true
         continue-on-error: true
 
       # drop backups
