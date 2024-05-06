@@ -46,24 +46,24 @@ jobs:
         id: sql_execute_create_baks        
         run: ~/snowflake/snowsql -f deploy/00-back-ups.sql
 
-      # create backup objects
-      - name: Execute Create Objects SQL Against Snowflake
+      # create new objects
+      - name: Execute Create New Objects SQL Against Snowflake
         id: sql_execute_create_new        
         run: ~/snowflake/snowsql -f deploy/01-objects.sql        
 
-      # create backup objects
-      - name: Execute Create Objects SQL Against Snowflake
+      # run tests
+      - name: Execute Testing SQL Against Snowflake
         id: sql_execute_test       
         run: ~/snowflake/snowsql -f deploy/02-test.sql         
 
-      # create backup objects
-      - name: Execute Create Objects SQL Against Snowflake
+      # drop backups
+      - name: Execute Drop Backup SQL Against Snowflake
         if: steps.sql_execute_test.outcome == 'success' 
         id: sql_execute_clean       
         run: ~/snowflake/snowsql -f deploy/03-clean-backups.sql
 
-      # create backup objects
-      - name: Execute Create Objects SQL Against Snowflake
+      # revert
+      - name: Execute Revert SQL Against Snowflake
         if: steps.sql_execute_test.outcome != 'success' 
         id: sql_execute_revert       
         run: ~/snowflake/snowsql -f deploy/03-revert.sql        
