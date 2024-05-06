@@ -17,7 +17,7 @@ env:
   SF_ROLE: ${{ secrets.SF_ROLE }}
   SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
   SF_DATABASE: ${{ secrets.SF_QA_DATABASE }}
-  SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
+  SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
 jobs:
   deploy-snowflake-changes-job:
     runs-on: ubuntu-latest
