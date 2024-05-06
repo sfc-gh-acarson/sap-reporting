@@ -17,7 +17,7 @@ env:
   SNOWSQL_PWD: ${{ secrets.SF_PASSWORD }}
   SNOWSQL_ROLE: ${{ secrets.SF_ROLE }}
   SNOWSQL_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}  
-  SNOWSQL_DATABASE: ${{ secrets.SF_QA_DATABASE }}
+  SNOWSQL_DATABASE: QA_DB
 jobs:
   deploy-snowflake-changes-job:
     runs-on: ubuntu-latest
