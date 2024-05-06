@@ -12,12 +12,18 @@ on:
   workflow_dispatch:
 
 env:
-  SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-  SF_USERNAME: ${{ secrets.SF_USERNAME }}
-  SF_ROLE: ${{ secrets.SF_ROLE }}
-  SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-  SF_DATABASE: ${{ secrets.SF_QA_DATABASE }}
-  SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
+  #SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
+  #SF_USERNAME: ${{ secrets.SF_USERNAME }}
+  #SF_ROLE: ${{ secrets.SF_ROLE }}
+  #SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
+  #SF_DATABASE: ${{ secrets.SF_QA_DATABASE }}
+  #SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
+  SNOWSQL_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
+  SNOWSQL_USER: ${{ secrets.SF_USERNAME }}
+  SNOWSQL_PWD: ${{ secrets.SF_PASSWORD }}
+  SNOWSQL_ROLE: ${{ secrets.SF_ROLE }}
+  SNOWSQL_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}  
+  SNOWSQL_DATABASE: ${{ secrets.SF_QA_DATABASE }}
 jobs:
   deploy-snowflake-changes-job:
     runs-on: ubuntu-latest
