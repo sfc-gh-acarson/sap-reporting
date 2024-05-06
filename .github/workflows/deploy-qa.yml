@@ -1,4 +1,4 @@
-name: snowflake-devops-demo
+name: deploy-qa
 
 # Controls when the action will run. 
 on:
@@ -6,38 +6,36 @@ on:
     branches:
       - main
     paths:
-      - 'migrations/**'
+      - 'deploy/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
+  SF_USERNAME: ${{ secrets.SF_USERNAME }}
+  SF_ROLE: ${{ secrets.SF_ROLE }}
+  SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
+  SF_DATABASE: ${{ secrets.SF_QA_DATABASE }}
+  SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
 jobs:
   deploy-snowflake-changes-job:
     runs-on: ubuntu-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Use Python 3.8.x
-        uses: actions/setup-python@v2.2.1
-        with:
-          python-version: 3.8.x
-
-      - name: Run schemachange
-        env:
-          SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-          SF_USERNAME: ${{ secrets.SF_USERNAME }}
-          SF_ROLE: ${{ secrets.SF_ROLE }}
-          SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-          SF_DATABASE: ${{ secrets.SF_QA_DATABASE }}
-          SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
-        run: |
-          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-          python --version
-          echo "Step 1: Installing schemachange"
-          pip install schemachange
+      - name: Checkout master
+        uses: actions/checkout@master
           
-          echo "Step 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/migrations -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table
+      - name: Download SnowSQL
+        run:  curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
+        
+      - name: Install SnowSQL          
+        run: SNOWSQL_DEST=~/snowflake SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+        
+      - name: Test installation
+        run:  ~/snowflake/snowsql -v 
+
+      # create backup objects
+      - name: Execute Create Backups SQL Against Snowflake
+        id: sql_execute_create_baks
+        run: ~/snowflake/snowsql -f 00_create_backups.sql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -r $SNOWSQL_ROLE -w $SNOWSQL_WAREHOUSE
