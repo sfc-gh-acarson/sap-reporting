@@ -44,35 +44,27 @@ jobs:
       # create backup objects
       - name: Execute Create Backups SQL Against Snowflake
         id: sql_execute_create_baks        
-        run: ~/snowflake/snowsql -f deploy/00-back-ups.sql 
-      
-      
-      - name: Execute Create New Objects SQL Against Snowflake
-        id: sql_execute_create_new        
-        run: ~/snowflake/snowsql -f deploy/01-objects.sql     
-
-      - name: Execute test
-        id: sql_execute_create_test
-        run: echo steps.sql_execute_create_new.outcome
+        run: ~/snowflake/snowsql -f deploy/00-back-ups.sql     
       
       # create new objects
-      #- name: Execute Create New Objects SQL Against Snowflake
-      #  id: sql_execute_create_new        
-      #  run: ~/snowflake/snowsql -f deploy/01-objects.sql        
+      - name: Execute Create New Objects SQL Against Snowflake
+        id: sql_execute_create_new        
+        run: ~/snowflake/snowsql -f deploy/01-objects.sql        
 
       # run tests
-      #- name: Execute Testing SQL Against Snowflake
-      #  id: sql_execute_test       
-      #  run: ~/snowflake/snowsql -f deploy/02-test.sql         
+      - name: Execute Testing SQL Against Snowflake
+        id: sql_execute_test       
+        run: ~/snowflake/snowsql -f deploy/02-test.sql
+        continue-on-error: true
 
       # drop backups
-      #- name: Execute Drop Backup SQL Against Snowflake
-      #  if: steps.sql_execute_test.outcome == 'success' 
-      #  id: sql_execute_clean       
-      #  run: ~/snowflake/snowsql -f deploy/03-clean-backups.sql
+      - name: Execute Drop Backup SQL Against Snowflake
+        if: steps.sql_execute_test.outcome == 'success' 
+        id: sql_execute_clean       
+        run: ~/snowflake/snowsql -f deploy/03-clean-backups.sql
       
       # revert
-      #- name: Execute Revert SQL Against Snowflake
-      #  if: steps.sql_execute_test.outcome != 'success' 
-      #  id: sql_execute_revert       
-      #  run: ~/snowflake/snowsql -f deploy/03-revert.sql        
+      - name: Execute Revert SQL Against Snowflake
+        if: steps.sql_execute_test.outcome != 'success' 
+        id: sql_execute_revert       
+        run: ~/snowflake/snowsql -f deploy/03-revert.sql        
